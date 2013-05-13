@@ -47,6 +47,8 @@ public class BuildWidget extends AppWidgetProvider {
     }
 
     public static class UpdateService extends Service {
+        private volatile int callledCount = 0;
+
         @Override
         public void onStart(Intent intent, int startId) {
             // Build the widget update
@@ -68,13 +70,7 @@ public class BuildWidget extends AppWidgetProvider {
                     0 /* no requestCode */, 
                     new Intent(android.provider.Settings.ACTION_DEVICE_INFO_SETTINGS),
                     0 /* no flags */);
-            updateViews.setOnClickPendingIntent(R.id.widget, pendingIntent);
-
-            updateViews.setTextViewText(R.id.build_info, android.os.Build.ID);
-            updateViews.setTextViewText(R.id.build_date, 
-                    DateUtils.formatDateTime(context, android.os.Build.TIME, 
-                        DateUtils.FORMAT_NUMERIC_DATE));
-            updateViews.setTextViewText(R.id.build_extra, android.os.Build.FINGERPRINT);
+            updateViews.setOnClickPendingIntent(R.id.text, pendingIntent);
             return updateViews;
         }
 

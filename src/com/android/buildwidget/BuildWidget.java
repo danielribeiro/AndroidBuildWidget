@@ -20,9 +20,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.Intent;
+import android.content.*;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.IBinder;
@@ -47,10 +45,59 @@ public class BuildWidget extends AppWidgetProvider {
     }
 
     public static class UpdateService extends Service {
-        private volatile int callledCount = 0;
+        private static final String ACTION = "com.android.samples.updateWidget";
+        private int callledCount = 0;
+        private BroadcastReceiver yourReceiver;
+
+
+        private void setupService() {
+            final UpdateService self = this;
+            log("setting up service");
+
+            super.onCreate();
+            final IntentFilter theFilter = new IntentFilter();
+            theFilter.addAction(ACTION);
+            this.yourReceiver = new BroadcastReceiver() {
+
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    log("received intent");
+                    // Do whatever you need it to do when it receives the broadcast
+                    // Example show a Toast message...
+                    RemoteViews updateViews = new RemoteViews(
+                            context.getPackageName(), R.layout.widget);
+                    updateViews.setTextViewText(R.id.text, "update count" + callledCount);
+                    // Push update for this widget to the home screen
+                    ComponentName thisWidget = new ComponentName(self, BuildWidget.class);
+                    AppWidgetManager manager = AppWidgetManager.getInstance(self);
+                    manager.updateAppWidget(thisWidget, updateViews);
+                }
+
+
+            };
+            // Registers the receiver so that your service will listen for
+            // broadcasts
+            this.registerReceiver(this.yourReceiver, theFilter);
+
+        }
+
+        private void log(String s) {
+            Log.i("--> APP", s);
+        }
+
+        @Override
+        public void onDestroy() {
+            log("destroying");
+            super.onDestroy();
+            // Do not forget to unregister the receiver!!!
+            this.unregisterReceiver(this.yourReceiver);
+        }
+
 
         @Override
         public void onStart(Intent intent, int startId) {
+            log("on start");
+            setupService();
             // Build the widget update
             RemoteViews updateViews = buildUpdate(this);
 
@@ -68,7 +115,7 @@ public class BuildWidget extends AppWidgetProvider {
 
             PendingIntent pendingIntent = PendingIntent.getActivity(context,
                     0 /* no requestCode */, 
-                    new Intent(android.provider.Settings.ACTION_DEVICE_INFO_SETTINGS),
+                    new Intent(ACTION),
                     0 /* no flags */);
             updateViews.setOnClickPendingIntent(R.id.text, pendingIntent);
             return updateViews;

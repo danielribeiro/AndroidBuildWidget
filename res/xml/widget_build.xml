@@ -21,6 +21,7 @@
     android:minHeight="72dip"
     android:updatePeriodMillis="0"
     android:initialLayout="@layout/widget"
+    android:widgetCategory="keyguard|home_screen"
     android:resizeMode="horizontal"
 />
 

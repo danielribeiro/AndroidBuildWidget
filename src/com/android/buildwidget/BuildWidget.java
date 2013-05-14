@@ -49,9 +49,11 @@ public class BuildWidget extends AppWidgetProvider {
         // Perform this loop procedure for each App Widget that belongs to this provider
         for (int appWidgetId : appWidgetIds) {
 
+            Log.i("--> on update", "id is " + appWidgetId);
             // Create an Intent to launch ExampleActivity
             Intent intent = new Intent(context, BuildWidget.class);
             intent.setAction(YOUR_AWESOME_ACTION);
+            intent.putExtra("appWidgetId", appWidgetId);
             PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
 
             // Get the layout for the App Widget and attach an on-click listener to the button
@@ -71,15 +73,27 @@ public class BuildWidget extends AppWidgetProvider {
 
 
     @Override
-    public void onReceive(Context context, Intent intent) {
-        super.onReceive(context, intent);
+    public void onReceive(Context context, Intent i) {
+        super.onReceive(context, i);
         SharedPreferences p = PreferenceManager.getDefaultSharedPreferences(context);
         int count = p.getInt("count", 0) + 1;
         setCount(context, count);
 
-        Log.i("--> message received", intent.getAction());
-        if (intent.getAction().equals(YOUR_AWESOME_ACTION)) {
-            Toast.makeText(context, "Touched view: " + count, Toast.LENGTH_SHORT).show();
+        Log.i("--> message received", i.getAction());
+        if (i.getAction().equals(YOUR_AWESOME_ACTION)) {
+            int appWidgetId = i.getIntExtra("appWidgetId", -1);
+            Intent intent = new Intent(context, BuildWidget.class);
+            intent.setAction(YOUR_AWESOME_ACTION);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
+            intent.putExtra("appWidgetId", appWidgetId);
+//
+//            // Get the layout for the App Widget and attach an on-click listener to the button
+            RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget);
+            views.setOnClickPendingIntent(R.id.text, pendingIntent);
+            // Tell the AppWidgetManager to perform an update on the current App Widget
+            views.setTextViewText(R.id.text, "a new text....." + count);
+            AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+            appWidgetManager.updateAppWidget(appWidgetId, views);
         }
     }
 }

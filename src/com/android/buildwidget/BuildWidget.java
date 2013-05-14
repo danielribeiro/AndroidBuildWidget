@@ -53,7 +53,6 @@ public class BuildWidget extends AppWidgetProvider {
             // Create an Intent to launch ExampleActivity
             Intent intent = new Intent(context, BuildWidget.class);
             intent.setAction(YOUR_AWESOME_ACTION);
-            intent.putExtra("appWidgetId", appWidgetId);
             PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
 
             // Get the layout for the App Widget and attach an on-click listener to the button
@@ -81,19 +80,22 @@ public class BuildWidget extends AppWidgetProvider {
 
         Log.i("--> message received", i.getAction());
         if (i.getAction().equals(YOUR_AWESOME_ACTION)) {
-            int appWidgetId = i.getIntExtra("appWidgetId", -1);
+            Log.i("--> message received", "Executing action for:");
             Intent intent = new Intent(context, BuildWidget.class);
             intent.setAction(YOUR_AWESOME_ACTION);
             PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
-            intent.putExtra("appWidgetId", appWidgetId);
 //
 //            // Get the layout for the App Widget and attach an on-click listener to the button
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget);
             views.setOnClickPendingIntent(R.id.text, pendingIntent);
             // Tell the AppWidgetManager to perform an update on the current App Widget
             views.setTextViewText(R.id.text, "a new text....." + count);
+            ComponentName thisWidget = new ComponentName(context, BuildWidget.class);
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-            appWidgetManager.updateAppWidget(appWidgetId, views);
+            appWidgetManager.updateAppWidget(thisWidget, views);
+        }
+        else {
+            Log.i("--> message received", "bad message");
         }
     }
 }

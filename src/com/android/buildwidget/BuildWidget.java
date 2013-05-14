@@ -80,7 +80,7 @@ public class BuildWidget extends AppWidgetProvider {
 
         Log.i("--> message received", i.getAction());
         if (i.getAction().equals(YOUR_AWESOME_ACTION)) {
-            Log.i("--> message received", "Executing action for:");
+            Log.i("--> message received", "Executing action");
             Intent intent = new Intent(context, BuildWidget.class);
             intent.setAction(YOUR_AWESOME_ACTION);
             PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);

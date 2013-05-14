@@ -24,6 +24,7 @@ import android.content.*;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.text.format.DateUtils;
 import android.text.format.Time;
 import android.util.Log;
@@ -43,6 +44,8 @@ public class BuildWidget extends AppWidgetProvider {
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         Log.i("--> on update", "updating");
         Log.i("--> on update", "size: "+ appWidgetIds.length);
+        setCount(context, 0);
+
         // Perform this loop procedure for each App Widget that belongs to this provider
         for (int appWidgetId : appWidgetIds) {
 
@@ -59,13 +62,24 @@ public class BuildWidget extends AppWidgetProvider {
         }
     }
 
+    private void setCount(Context context, int value) {
+        SharedPreferences p = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = p.edit();
+        editor.putInt("count", value);
+        editor.commit();
+    }
+
 
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
+        SharedPreferences p = PreferenceManager.getDefaultSharedPreferences(context);
+        int count = p.getInt("count", 0) + 1;
+        setCount(context, count);
+
         Log.i("--> message received", intent.getAction());
         if (intent.getAction().equals(YOUR_AWESOME_ACTION)) {
-            Toast.makeText(context, "Touched view ", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Touched view: " + count, Toast.LENGTH_SHORT).show();
         }
     }
 }

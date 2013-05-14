@@ -38,12 +38,15 @@ import java.util.regex.Pattern;
  * Totally based of : http://stackoverflow.com/a/2748723 and https://github.com/android/platform_development/tree/master/apps/BuildWidget
  */
 public class BuildWidget extends AppWidgetProvider {
-    public static String YOUR_AWESOME_ACTION = "YourAwesomeAction";
+    public static final String YOUR_AWESOME_ACTION = "YourAwesomeAction";
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         Log.i("--> on update", "updating");
         Log.i("--> on update", "size: "+ appWidgetIds.length);
+        Intent serviceIntent = new Intent(context, EchoService.class);
+        context.startService(serviceIntent);
+
         setCount(context, 0);
 
         // Perform this loop procedure for each App Widget that belongs to this provider
@@ -51,16 +54,27 @@ public class BuildWidget extends AppWidgetProvider {
 
             Log.i("--> on update", "id is " + appWidgetId);
             // Create an Intent to launch ExampleActivity
-            Intent intent = new Intent(context, BuildWidget.class);
-            intent.setAction(YOUR_AWESOME_ACTION);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
-
-            // Get the layout for the App Widget and attach an on-click listener to the button
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget);
-            views.setOnClickPendingIntent(R.id.text, pendingIntent);
+            views.setOnClickPendingIntent(R.id.text, awesomeIntent(context));
+            views.setOnClickPendingIntent(R.id.imageView, serviceIntent(context));
+
             // Tell the AppWidgetManager to perform an update on the current App Widget
             appWidgetManager.updateAppWidget(appWidgetId, views);
         }
+    }
+
+    private PendingIntent awesomeIntent(Context context) {
+        Intent intent = new Intent(context, BuildWidget.class);
+        intent.setAction(YOUR_AWESOME_ACTION);
+        // Get the layout for the App Widget and attach an on-click listener to the button
+        return PendingIntent.getBroadcast(context, 0, intent, 0);
+    }
+
+    private PendingIntent serviceIntent(Context context) {
+        Intent intent = new Intent();
+        intent.setAction(EchoService.ACTION);
+        // Get the layout for the App Widget and attach an on-click listener to the button
+        return PendingIntent.getBroadcast(context, 0, intent, 0);
     }
 
     private void setCount(Context context, int value) {
@@ -81,13 +95,11 @@ public class BuildWidget extends AppWidgetProvider {
         Log.i("--> message received", i.getAction());
         if (i.getAction().equals(YOUR_AWESOME_ACTION)) {
             Log.i("--> message received", "Executing action");
-            Intent intent = new Intent(context, BuildWidget.class);
-            intent.setAction(YOUR_AWESOME_ACTION);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
-//
+            //
 //            // Get the layout for the App Widget and attach an on-click listener to the button
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget);
-            views.setOnClickPendingIntent(R.id.text, pendingIntent);
+            views.setOnClickPendingIntent(R.id.text, awesomeIntent(context));
+            views.setOnClickPendingIntent(R.id.imageView, serviceIntent(context));
             // Tell the AppWidgetManager to perform an update on the current App Widget
             views.setTextViewText(R.id.text, "a new text....." + count);
             ComponentName thisWidget = new ComponentName(context, BuildWidget.class);

@@ -35,7 +35,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Totally based of : http://stackoverflow.com/a/2748723
+ * Totally based of : http://stackoverflow.com/a/2748723 and https://github.com/android/platform_development/tree/master/apps/BuildWidget
  */
 public class BuildWidget extends AppWidgetProvider {
     public static String YOUR_AWESOME_ACTION = "YourAwesomeAction";
@@ -64,7 +64,7 @@ public class BuildWidget extends AppWidgetProvider {
     }
 
     private void setCount(Context context, int value) {
-        SharedPreferences p = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences p = context.getSharedPreferences("data", Context.MODE_MULTI_PROCESS);
         SharedPreferences.Editor editor = p.edit();
         editor.putInt("count", value);
         editor.commit();
@@ -74,7 +74,7 @@ public class BuildWidget extends AppWidgetProvider {
     @Override
     public void onReceive(Context context, Intent i) {
         super.onReceive(context, i);
-        SharedPreferences p = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences p = context.getSharedPreferences("data", Context.MODE_MULTI_PROCESS);
         int count = p.getInt("count", 0) + 1;
         setCount(context, count);
 

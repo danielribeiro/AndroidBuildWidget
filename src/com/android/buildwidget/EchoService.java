@@ -9,8 +9,11 @@ import android.os.IBinder;
 import android.util.Log;
 
 public class EchoService extends Service {
+
+
     public static final String ACTION = "SendAnEchoToEchoService";
     private BroadcastReceiver yourReceiver;
+    private int echoCount = 0;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -31,7 +34,8 @@ public class EchoService extends Service {
             public void onReceive(Context context, Intent intent) {
                 // Do whatever you need it to do when it receives the broadcast
                 // Example show a Toast message...
-                Log.i(" ---- > on service", "got a broadcast");
+                echoCount++;
+                Log.i(" ---- > on service", "got a broadcast the following times:" + echoCount);
             }
         };
         // Registers the receiver so that your service will listen for

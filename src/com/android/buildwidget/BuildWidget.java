@@ -64,7 +64,9 @@ public class BuildWidget extends AppWidgetProvider {
 
     private void setClickEvents(Context context, RemoteViews views) {
         views.setOnClickPendingIntent(R.id.text, awesomeIntent(context));
+        views.setOnClickPendingIntent(R.id.imageView, awesomeIntent(context));
         views.setOnClickPendingIntent(R.id.imageView, serviceIntent(context));
+
     }
 
     private PendingIntent awesomeIntent(Context context) {

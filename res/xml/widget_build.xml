@@ -15,10 +15,10 @@
 -->
 
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
-    android:minResizeWidth="72dip"
-    android:minResizeHeight="72dip"
-    android:minWidth="72dip"
-    android:minHeight="72dip"
+    android:minResizeWidth="100dip"
+    android:minResizeHeight="100dip"
+    android:minWidth="100dip"
+    android:minHeight="100dip"
     android:updatePeriodMillis="0"
     android:initialLayout="@layout/widget"
     android:widgetCategory="keyguard|home_screen"

@@ -55,12 +55,16 @@ public class BuildWidget extends AppWidgetProvider {
             Log.i("--> on update", "id is " + appWidgetId);
             // Create an Intent to launch ExampleActivity
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget);
-            views.setOnClickPendingIntent(R.id.text, awesomeIntent(context));
-            views.setOnClickPendingIntent(R.id.imageView, serviceIntent(context));
+            setClickEvents(context, views);
 
             // Tell the AppWidgetManager to perform an update on the current App Widget
             appWidgetManager.updateAppWidget(appWidgetId, views);
         }
+    }
+
+    private void setClickEvents(Context context, RemoteViews views) {
+        views.setOnClickPendingIntent(R.id.text, awesomeIntent(context));
+        views.setOnClickPendingIntent(R.id.imageView, serviceIntent(context));
     }
 
     private PendingIntent awesomeIntent(Context context) {
@@ -98,10 +102,10 @@ public class BuildWidget extends AppWidgetProvider {
             //
 //            // Get the layout for the App Widget and attach an on-click listener to the button
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget);
-            views.setOnClickPendingIntent(R.id.text, awesomeIntent(context));
-            views.setOnClickPendingIntent(R.id.imageView, serviceIntent(context));
+            setClickEvents(context, views);
             // Tell the AppWidgetManager to perform an update on the current App Widget
             views.setTextViewText(R.id.text, "a new text....." + count);
+            views.setImageViewResource(R.id.imageView, R.drawable.uparrow);
             ComponentName thisWidget = new ComponentName(context, BuildWidget.class);
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
             appWidgetManager.updateAppWidget(thisWidget, views);

@@ -25,11 +25,11 @@
             android:text="cooliex"
             android:id="@+id/text"
             />
-    <ImageButton
+    <ImageView
     android:layout_width="100dp"
     android:layout_height="100dp"
     android:id="@+id/imageView" android:layout_gravity="center"
-    android:src="@drawable/uparrow"
+    android:src="@drawable/downarrow"
     />
 </LinearLayout>
 

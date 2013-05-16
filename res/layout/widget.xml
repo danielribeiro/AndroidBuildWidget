@@ -25,7 +25,7 @@
             android:text="cooliex"
             android:id="@+id/text"
             />
-    <ImageView
+    <ImageButton
     android:layout_width="100dp"
     android:layout_height="100dp"
     android:id="@+id/imageView" android:layout_gravity="center"

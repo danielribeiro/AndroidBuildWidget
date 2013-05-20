@@ -34,6 +34,8 @@ import android.widget.Toast;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.android.buildwidget.WidgetHelper.*;
+
 /**
  * Totally based of : http://stackoverflow.com/a/2748723 and https://github.com/android/platform_development/tree/master/apps/BuildWidget
  */
@@ -62,26 +64,7 @@ public class BuildWidget extends AppWidgetProvider {
         }
     }
 
-    private void setClickEvents(Context context, RemoteViews views) {
-        views.setOnClickPendingIntent(R.id.text, awesomeIntent(context));
-//        views.setOnClickPendingIntent(R.id.imageView, awesomeIntent(context)); Last one wins
-        views.setOnClickPendingIntent(R.id.imageView, serviceIntent(context));
 
-    }
-
-    private PendingIntent awesomeIntent(Context context) {
-        Intent intent = new Intent(context, BuildWidget.class);
-        intent.setAction(YOUR_AWESOME_ACTION);
-        // Get the layout for the App Widget and attach an on-click listener to the button
-        return PendingIntent.getBroadcast(context, 0, intent, 0);
-    }
-
-    private PendingIntent serviceIntent(Context context) {
-        Intent intent = new Intent();
-        intent.setAction(EchoService.ACTION);
-        // Get the layout for the App Widget and attach an on-click listener to the button
-        return PendingIntent.getBroadcast(context, 0, intent, 0);
-    }
 
     private void setCount(Context context, int value) {
         SharedPreferences p = context.getSharedPreferences("data", Context.MODE_MULTI_PROCESS);

@@ -40,7 +40,6 @@ import static com.android.buildwidget.WidgetHelper.*;
  * Totally based of : http://stackoverflow.com/a/2748723 and https://github.com/android/platform_development/tree/master/apps/BuildWidget
  */
 public class BuildWidget extends AppWidgetProvider {
-    public static final String YOUR_AWESOME_ACTION = "YourAwesomeAction";
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
@@ -48,9 +47,6 @@ public class BuildWidget extends AppWidgetProvider {
         Log.i("--> on update", "size: "+ appWidgetIds.length);
         Intent serviceIntent = new Intent(context, EchoService.class);
         context.startService(serviceIntent);
-
-        setCount(context, 0);
-
         // Perform this loop procedure for each App Widget that belongs to this provider
         for (int appWidgetId : appWidgetIds) {
 
@@ -64,39 +60,4 @@ public class BuildWidget extends AppWidgetProvider {
         }
     }
 
-
-
-    private void setCount(Context context, int value) {
-        SharedPreferences p = context.getSharedPreferences("data", Context.MODE_MULTI_PROCESS);
-        SharedPreferences.Editor editor = p.edit();
-        editor.putInt("count", value);
-        editor.commit();
-    }
-
-
-    @Override
-    public void onReceive(Context context, Intent i) {
-        super.onReceive(context, i);
-        SharedPreferences p = context.getSharedPreferences("data", Context.MODE_MULTI_PROCESS);
-        int count = p.getInt("count", 0) + 1;
-        setCount(context, count);
-
-        Log.i("--> message received", i.getAction());
-        if (i.getAction().equals(YOUR_AWESOME_ACTION)) {
-            Log.i("--> message received", "Executing action");
-            //
-//            // Get the layout for the App Widget and attach an on-click listener to the button
-            RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget);
-            setClickEvents(context, views);
-            // Tell the AppWidgetManager to perform an update on the current App Widget
-            views.setTextViewText(R.id.text, "a new text....." + count);
-            toggleView(views, count);
-            ComponentName thisWidget = new ComponentName(context, BuildWidget.class);
-            AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-            appWidgetManager.updateAppWidget(thisWidget, views);
-        }
-        else {
-            Log.i("--> message received", "bad message");
-        }
-    }
 }

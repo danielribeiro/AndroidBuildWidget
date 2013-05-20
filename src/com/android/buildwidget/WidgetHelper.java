@@ -3,6 +3,7 @@ package com.android.buildwidget;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.widget.RemoteViews;
 
 public class WidgetHelper {
@@ -13,6 +14,14 @@ public class WidgetHelper {
 
     public static void toggleView(RemoteViews views, int count) {
         views.setImageViewResource(R.id.imageView, getView(count));
+    }
+
+
+    public static void setCount(Context context, int value) {
+        SharedPreferences p = context.getSharedPreferences("data", Context.MODE_MULTI_PROCESS);
+        SharedPreferences.Editor editor = p.edit();
+        editor.putInt("count", value);
+        editor.commit();
     }
 
     private static PendingIntent serviceIntent(Context context) {

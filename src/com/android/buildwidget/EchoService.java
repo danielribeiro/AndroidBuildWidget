@@ -63,12 +63,6 @@ public class EchoService extends Service {
 
     }
 
-    private void setCount(Context context, int value) {
-        SharedPreferences p = context.getSharedPreferences("data", Context.MODE_MULTI_PROCESS);
-        SharedPreferences.Editor editor = p.edit();
-        editor.putInt("count", value);
-        editor.commit();
-    }
 
     @Override
     public void onDestroy() {

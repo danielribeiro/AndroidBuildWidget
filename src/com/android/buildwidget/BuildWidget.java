@@ -45,6 +45,7 @@ public class BuildWidget extends AppWidgetProvider {
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         Log.i("--> on update", "updating");
         Log.i("--> on update", "size: "+ appWidgetIds.length);
+        setCount(context, 0);
         Intent serviceIntent = new Intent(context, EchoService.class);
         context.startService(serviceIntent);
         // Perform this loop procedure for each App Widget that belongs to this provider

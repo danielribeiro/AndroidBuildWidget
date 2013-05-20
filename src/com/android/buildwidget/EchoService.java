@@ -1,9 +1,13 @@
 package com.android.buildwidget;
 
 import android.app.Service;
+import android.appwidget.AppWidgetManager;
 import android.content.*;
 import android.os.IBinder;
 import android.util.Log;
+import android.widget.RemoteViews;
+
+import static com.android.buildwidget.WidgetHelper.*;
 
 public class EchoService extends Service {
 
@@ -45,6 +49,16 @@ public class EchoService extends Service {
         SharedPreferences p = context.getSharedPreferences("data", Context.MODE_MULTI_PROCESS);
         int c = p.getInt("count", -1);
         Log.i(" ---- > on service", "The shared count is: " + c);
+        Log.i("--> message received", "Executing action");
+        //
+//            // Get the layout for the App Widget and attach an on-click listener to the button
+        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget);
+        setClickEvents(context, views);
+        // Tell the AppWidgetManager to perform an update on the current App Widget
+        toggleView(views, c);
+        ComponentName thisWidget = new ComponentName(context, BuildWidget.class);
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+        appWidgetManager.updateAppWidget(thisWidget, views);
 
     }
 

@@ -90,7 +90,7 @@ public class BuildWidget extends AppWidgetProvider {
             setClickEvents(context, views);
             // Tell the AppWidgetManager to perform an update on the current App Widget
             views.setTextViewText(R.id.text, "a new text....." + count);
-            views.setImageViewResource(R.id.imageView, R.drawable.button_pressed_yellow);
+            toggleView(views, count);
             ComponentName thisWidget = new ComponentName(context, BuildWidget.class);
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
             appWidgetManager.updateAppWidget(thisWidget, views);

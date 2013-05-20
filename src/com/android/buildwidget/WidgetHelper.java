@@ -25,4 +25,13 @@ public class WidgetHelper {
         // Get the layout for the App Widget and attach an on-click listener to the button
         return PendingIntent.getBroadcast(context, 0, intent, 0);
     }
+
+    public static void toggleView(RemoteViews views, int count) {
+        views.setImageViewResource(R.id.imageView, getView(count));
+    }
+
+    private static int getView(int count) {
+        if (count % 2 == 1) return R.drawable.button_pressed_yellow;
+        return R.drawable.button_normal_green;
+    }
 }

@@ -1,10 +1,7 @@
 package com.android.buildwidget;
 
 import android.app.Service;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
+import android.content.*;
 import android.os.IBinder;
 import android.util.Log;
 
@@ -32,15 +29,23 @@ public class EchoService extends Service {
 
             @Override
             public void onReceive(Context context, Intent intent) {
-                // Do whatever you need it to do when it receives the broadcast
-                // Example show a Toast message...
-                echoCount++;
-                Log.i(" ---- > on service", "got a broadcast the following times:" + echoCount);
+                doReceive(context, intent);
             }
         };
         // Registers the receiver so that your service will listen for
         // broadcasts
         this.registerReceiver(this.yourReceiver, theFilter);
+    }
+
+    protected void doReceive(Context context, Intent intent) {
+        // Do whatever you need it to do when it receives the broadcast
+        // Example show a Toast message...
+        echoCount++;
+        Log.i(" ---- > on service", "got a broadcast the following times:" + echoCount);
+        SharedPreferences p = context.getSharedPreferences("data", Context.MODE_MULTI_PROCESS);
+        int c = p.getInt("count", -1);
+        Log.i(" ---- > on service", "The shared count is: " + c);
+
     }
 
     @Override

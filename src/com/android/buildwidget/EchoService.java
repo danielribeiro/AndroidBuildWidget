@@ -1,12 +1,13 @@
 package com.android.buildwidget;
 
 import android.app.Service;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
+import android.appwidget.AppWidgetManager;
+import android.content.*;
 import android.os.IBinder;
 import android.util.Log;
+import android.widget.RemoteViews;
+
+import static com.android.buildwidget.WidgetHelper.*;
 
 public class EchoService extends Service {
 
@@ -32,16 +33,36 @@ public class EchoService extends Service {
 
             @Override
             public void onReceive(Context context, Intent intent) {
-                // Do whatever you need it to do when it receives the broadcast
-                // Example show a Toast message...
-                echoCount++;
-                Log.i(" ---- > on service", "got a broadcast the following times:" + echoCount);
+                doReceive(context, intent);
             }
         };
         // Registers the receiver so that your service will listen for
         // broadcasts
         this.registerReceiver(this.yourReceiver, theFilter);
     }
+
+    protected void doReceive(Context context, Intent intent) {
+        // Do whatever you need it to do when it receives the broadcast
+        // Example show a Toast message...
+        echoCount++;
+        Log.i(" ---- > on service", "got a broadcast the following times:" + echoCount);
+        SharedPreferences p = context.getSharedPreferences("data", Context.MODE_MULTI_PROCESS);
+        int c = p.getInt("count", 0);
+        Log.i(" ---- > on service", "The shared count is: " + c);
+        Log.i("--> message received", "Executing action");
+        setCount(context, c + 1);
+        //
+//            // Get the layout for the App Widget and attach an on-click listener to the button
+        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget);
+        setClickEvents(context, views);
+        // Tell the AppWidgetManager to perform an update on the current App Widget
+        toggleView(views, c);
+        ComponentName thisWidget = new ComponentName(context, BuildWidget.class);
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+        appWidgetManager.updateAppWidget(thisWidget, views);
+
+    }
+
 
     @Override
     public void onDestroy() {

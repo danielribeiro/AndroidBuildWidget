@@ -16,39 +16,28 @@
 
 package com.android.buildwidget;
 
-import android.app.PendingIntent;
-import android.app.Service;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
-import android.content.*;
-import android.content.res.Resources;
-import android.net.Uri;
-import android.os.IBinder;
-import android.preference.PreferenceManager;
-import android.text.format.DateUtils;
-import android.text.format.Time;
+import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.widget.RemoteViews;
-import android.widget.Toast;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import static com.android.buildwidget.WidgetHelper.setClickEvents;
+import static com.android.buildwidget.WidgetHelper.setCount;
 
 /**
  * Totally based of : http://stackoverflow.com/a/2748723 and https://github.com/android/platform_development/tree/master/apps/BuildWidget
  */
 public class BuildWidget extends AppWidgetProvider {
-    public static final String YOUR_AWESOME_ACTION = "YourAwesomeAction";
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         Log.i("--> on update", "updating");
         Log.i("--> on update", "size: "+ appWidgetIds.length);
+        setCount(context, 0);
         Intent serviceIntent = new Intent(context, EchoService.class);
         context.startService(serviceIntent);
-
-        setCount(context, 0);
-
         // Perform this loop procedure for each App Widget that belongs to this provider
         for (int appWidgetId : appWidgetIds) {
 
@@ -62,58 +51,4 @@ public class BuildWidget extends AppWidgetProvider {
         }
     }
 
-    private void setClickEvents(Context context, RemoteViews views) {
-        views.setOnClickPendingIntent(R.id.text, awesomeIntent(context));
-//        views.setOnClickPendingIntent(R.id.imageView, awesomeIntent(context)); Last one wins
-        views.setOnClickPendingIntent(R.id.imageView, serviceIntent(context));
-
-    }
-
-    private PendingIntent awesomeIntent(Context context) {
-        Intent intent = new Intent(context, BuildWidget.class);
-        intent.setAction(YOUR_AWESOME_ACTION);
-        // Get the layout for the App Widget and attach an on-click listener to the button
-        return PendingIntent.getBroadcast(context, 0, intent, 0);
-    }
-
-    private PendingIntent serviceIntent(Context context) {
-        Intent intent = new Intent();
-        intent.setAction(EchoService.ACTION);
-        // Get the layout for the App Widget and attach an on-click listener to the button
-        return PendingIntent.getBroadcast(context, 0, intent, 0);
-    }
-
-    private void setCount(Context context, int value) {
-        SharedPreferences p = context.getSharedPreferences("data", Context.MODE_MULTI_PROCESS);
-        SharedPreferences.Editor editor = p.edit();
-        editor.putInt("count", value);
-        editor.commit();
-    }
-
-
-    @Override
-    public void onReceive(Context context, Intent i) {
-        super.onReceive(context, i);
-        SharedPreferences p = context.getSharedPreferences("data", Context.MODE_MULTI_PROCESS);
-        int count = p.getInt("count", 0) + 1;
-        setCount(context, count);
-
-        Log.i("--> message received", i.getAction());
-        if (i.getAction().equals(YOUR_AWESOME_ACTION)) {
-            Log.i("--> message received", "Executing action");
-            //
-//            // Get the layout for the App Widget and attach an on-click listener to the button
-            RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget);
-            setClickEvents(context, views);
-            // Tell the AppWidgetManager to perform an update on the current App Widget
-            views.setTextViewText(R.id.text, "a new text....." + count);
-            views.setImageViewResource(R.id.imageView, R.drawable.uparrow);
-            ComponentName thisWidget = new ComponentName(context, BuildWidget.class);
-            AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-            appWidgetManager.updateAppWidget(thisWidget, views);
-        }
-        else {
-            Log.i("--> message received", "bad message");
-        }
-    }
 }

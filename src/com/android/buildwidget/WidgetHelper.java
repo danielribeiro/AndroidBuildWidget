@@ -23,7 +23,7 @@ public class WidgetHelper {
     }
 
     private static int getView(int count) {
-        if (count % 2 == 1) return R.drawable.button_pressed_yellow;
+        if (count % 2 == 0) return R.drawable.button_pressed_yellow;
         return R.drawable.button_normal_green;
     }
 }

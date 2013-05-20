@@ -16,25 +16,15 @@
 
 package com.android.buildwidget;
 
-import android.app.PendingIntent;
-import android.app.Service;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
-import android.content.*;
-import android.content.res.Resources;
-import android.net.Uri;
-import android.os.IBinder;
-import android.preference.PreferenceManager;
-import android.text.format.DateUtils;
-import android.text.format.Time;
+import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.widget.RemoteViews;
-import android.widget.Toast;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import static com.android.buildwidget.WidgetHelper.*;
+import static com.android.buildwidget.WidgetHelper.setClickEvents;
+import static com.android.buildwidget.WidgetHelper.setCount;
 
 /**
  * Totally based of : http://stackoverflow.com/a/2748723 and https://github.com/android/platform_development/tree/master/apps/BuildWidget

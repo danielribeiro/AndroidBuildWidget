@@ -19,17 +19,43 @@
               android:layout_width="fill_parent"
               android:layout_height="fill_parent"
         >
-    <ImageView
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            >
+        <ImageView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageView1"
+                android:src="@drawable/button_normal_green"
+                android:layout_gravity="center"
+                android:adjustViewBounds="true"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Left Android"
+                android:id="@+id/textView" android:layout_gravity="center"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="20dp">
+        <ImageView
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:id="@+id/imageView1" android:layout_gravity="left|top"
-    android:src="@drawable/button_normal_green"
-    android:adjustViewBounds="true"/>
-    <ImageView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:id="@+id/imageView2" android:layout_gravity="right|top"
+    android:id="@+id/imageView2"
+    android:layout_gravity="center"
     android:src="@drawable/button_normal_blue"
-    android:paddingLeft="30dp"/>
+                />
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Right Android"
+                android:id="@+id/textView1" android:layout_gravity="center_horizontal|top"/>
+    </LinearLayout>
 </LinearLayout>
 

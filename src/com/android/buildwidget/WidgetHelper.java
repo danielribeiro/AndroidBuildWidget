@@ -4,16 +4,20 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.widget.RemoteViews;
 
 public class WidgetHelper {
     public static void setClickEvents(Context context, RemoteViews views) {
+        Log.i("setting events: ", " for: " + R.id.imageView1 + " and " + R.id.imageView2);
         views.setOnClickPendingIntent(R.id.imageView1, serviceIntent(context, R.id.imageView1));
+        views.setOnClickPendingIntent(R.id.imageView2, serviceIntent(context, R.id.imageView2));
 
     }
 
     public static void toggleView(RemoteViews views, int count, int view) {
         // To do it dynamically: http://stackoverflow.com/questions/7948059/dynamic-loading-of-images-r-drawable-using-variable
+        Log.i("togling view for", " for: " + view);
         views.setImageViewResource(view, getView(count, view));
     }
 
@@ -30,7 +34,7 @@ public class WidgetHelper {
         intent.setAction(EchoService.ACTION);
         intent.putExtra("view", view);
         // Get the layout for the App Widget and attach an on-click listener to the button
-        return PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        return PendingIntent.getBroadcast(context, view, intent, PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
     private static int getView(int count, int view) {

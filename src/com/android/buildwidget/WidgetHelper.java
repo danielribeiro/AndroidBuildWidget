@@ -8,13 +8,13 @@ import android.widget.RemoteViews;
 
 public class WidgetHelper {
     public static void setClickEvents(Context context, RemoteViews views) {
-        views.setOnClickPendingIntent(R.id.imageView, serviceIntent(context));
+        views.setOnClickPendingIntent(R.id.imageView1, serviceIntent(context));
 
     }
 
     public static void toggleView(RemoteViews views, int count) {
         // To do it dynamically: http://stackoverflow.com/questions/7948059/dynamic-loading-of-images-r-drawable-using-variable
-        views.setImageViewResource(R.id.imageView, getView(count));
+        views.setImageViewResource(R.id.imageView1, getView(count));
     }
 
 

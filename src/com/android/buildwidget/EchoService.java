@@ -47,16 +47,19 @@ public class EchoService extends Service {
         echoCount++;
         Log.i(" ---- > on service", "got a broadcast the following times:" + echoCount);
         SharedPreferences p = context.getSharedPreferences("data", Context.MODE_MULTI_PROCESS);
-        int c = p.getInt("count", 0);
+
+        int view = intent.getIntExtra("view", -1);
+        Log.i(" ---- > on service", "The view is: " + view);
+        int c = p.getInt("count" + view, 0);
         Log.i(" ---- > on service", "The shared count is: " + c);
         Log.i("--> message received", "Executing action");
-        setCount(context, c + 1);
+        setCount(view, context, c + 1);
         //
 //            // Get the layout for the App Widget and attach an on-click listener to the button
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget);
         setClickEvents(context, views);
         // Tell the AppWidgetManager to perform an update on the current App Widget
-        toggleView(views, c);
+        toggleView(views, c, view);
         ComponentName thisWidget = new ComponentName(context, BuildWidget.class);
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
         appWidgetManager.updateAppWidget(thisWidget, views);

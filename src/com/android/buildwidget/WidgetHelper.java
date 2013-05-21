@@ -13,6 +13,7 @@ public class WidgetHelper {
     }
 
     public static void toggleView(RemoteViews views, int count) {
+        // To do it dynamically: http://stackoverflow.com/questions/7948059/dynamic-loading-of-images-r-drawable-using-variable
         views.setImageViewResource(R.id.imageView, getView(count));
     }
 

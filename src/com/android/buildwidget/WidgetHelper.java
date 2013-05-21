@@ -34,7 +34,7 @@ public class WidgetHelper {
         intent.setAction(EchoService.ACTION);
         intent.putExtra("view", view);
         // Get the layout for the App Widget and attach an on-click listener to the button
-        return PendingIntent.getBroadcast(context, view, intent, PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_UPDATE_CURRENT);
+        return PendingIntent.getBroadcast(context, view, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
     private static int getView(int count, int view) {
